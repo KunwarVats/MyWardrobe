@@ -9,7 +9,10 @@ import Foundation
 import SwiftUI
 
 class ProductViewModel: ObservableObject {
+    
     @Published var products: [Product] = []
+    @Published var selectedoptionForFilter: String = ""
+
     private let productService: ProductService
 
     init() {

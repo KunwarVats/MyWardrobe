@@ -15,7 +15,6 @@ struct WardRobeView: View {
     @State private var selectedItems: [String: [String]] = [:] // Dictionary to hold selected items for each horizontal item
     @State private var showFilterView = false
     @State private var showAddProductView = false // State variable for showing the add product view
-    @State private var selectedTextItem: String? = nil
     @StateObject private var apiService = ApiService()
     @StateObject private var viewModel = ProductViewModel()
 
@@ -34,7 +33,7 @@ struct WardRobeView: View {
                                 .background(backgroundColor)
                                 .cornerRadius(10)
                                 .onTapGesture {
-                                    selectedTextItem = item // Store the selected item
+                                    viewModel.selectedoptionForFilter = item // Store the selected item
                                     showFilterView = true // Show the modal sheet
                                 }
                         }
@@ -61,10 +60,10 @@ struct WardRobeView: View {
             }
             .padding(.bottom, 20) // Additional padding at the bottom of the VStack
             .sheet(isPresented: $showFilterView) {
-                if selectedTextItem != nil {
+                if viewModel.selectedoptionForFilter != nil {
                     // Present the custom view when tapped on horizontal scroll items
                     
-                    FilterView(showSheet: $showFilterView, selectedItems: $selectedItems[selectedTextItem ?? ""], item: selectedTextItem ?? "")
+                    FilterView(showSheet: $showFilterView, selectedItems: $selectedItems[viewModel.selectedoptionForFilter], item: viewModel.selectedoptionForFilter)
                 }
             }
 
@@ -89,9 +88,14 @@ struct WardRobeView: View {
                 }
             }
             .sheet(isPresented: $showAddProductView) {
-                AddProductView() // Present the AddProductView
+                AddProductView(updateList: updateList) // Present the AddProductView
             }
         }
+
+    }
+    
+    func updateList() {
+        viewModel.fetchProducts()
     }
 }
 

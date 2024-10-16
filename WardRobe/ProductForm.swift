@@ -20,6 +20,8 @@ struct AddProductView: View {
     // State for error messages
     @State private var errorMessage: String = ""
     @State private var showError: Bool = false
+    let updateList: () -> ()
+
 
     var body: some View {
         VStack(spacing: 0) { // Use a VStack to prevent overlap
@@ -139,6 +141,7 @@ struct AddProductView: View {
         newProduct.imageData = selectedImage // Save the image data
         
         PersistenceController.shared.saveContext()
+        updateList()
         presentationMode.wrappedValue.dismiss() // Dismiss the view after saving
     }
 }
